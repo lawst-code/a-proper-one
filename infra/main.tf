@@ -35,7 +35,7 @@ resource "google_cloud_run_service" "a_proper_one" {
     spec {
       containers {
         image = var.container_image
-        
+
         ports {
           container_port = 8000
         }
@@ -75,7 +75,7 @@ resource "google_cloud_run_service" "a_proper_one" {
 }
 
 # IAM policy to allow unauthenticated access
-# Not setting up proper auth in this example (for now)           (?)
+# Not setting up proper auth in this example (for now)
 resource "google_cloud_run_service_iam_member" "public_access" {
   location = google_cloud_run_service.a_proper_one.location
   project  = google_cloud_run_service.a_proper_one.project
