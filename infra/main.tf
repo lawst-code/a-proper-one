@@ -54,13 +54,13 @@ resource "google_cloud_run_service" "a_proper_one" {
       }
 
       container_concurrency = 100
-      timeout_seconds      = 300
+      timeout_seconds       = 300
     }
 
     metadata {
       annotations = {
-        "autoscaling.knative.dev/minScale" = "0"
-        "autoscaling.knative.dev/maxScale" = "10"
+        "autoscaling.knative.dev/minScale"         = "0"
+        "autoscaling.knative.dev/maxScale"         = "10"
         "run.googleapis.com/execution-environment" = "gen2"
       }
     }
