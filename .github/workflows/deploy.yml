@@ -75,6 +75,11 @@ jobs:
 
       - name: Run Integration Tests
         run: |
+          # Install test dependencies in this job
+          cd app/a_proper_one
+          python -m pip install --upgrade pip
+          pip install pytest requests
+          
           # Start container
           docker run -d --name test-container -p 8000:8000 gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA
           
