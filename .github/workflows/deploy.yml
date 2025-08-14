@@ -1,0 +1,173 @@
+name: A Proper Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}'
+  GAR_LOCATION: europe-west1
+  SERVICE: a-proper-one-plugin
+  REGION: europe-west1
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          cd app/a_proper_one
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest black flake8 requests
+          
+      - name: Install Noxus CLI
+        run: |
+          cd app/a_proper_one
+          pip install git+https://github.com/lawst-code/Noxus.git
+
+      - name: Run unit tests
+         run: |
+           cd app/a_proper_one
+           pytest tests/unit/ -v
+
+      - name: Run linting
+        run: |
+          cd app/a_proper_one
+          black --check .
+          flake8 .
+
+  deploy-infrastructure:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Set up Google Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.5.0
+
+      - name: Terraform Format
+        run: |
+          cd infra
+          terraform fmt -check
+
+      - name: Terraform Init
+        run: |
+          cd infra
+          terraform init
+
+      - name: Terraform Validate
+        run: |
+          cd infra
+          terraform validate
+
+      - name: Terraform Plan
+        run: |
+          cd infra
+          terraform plan \
+            -var="project_id=$PROJECT_ID" \
+            -var="region=$REGION" \
+            -var="container_image=gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA"
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main'
+        run: |
+          cd infra
+          terraform apply -auto-approve \
+            -var="project_id=$PROJECT_ID" \
+            -var="region=$REGION" \
+            -var="container_image=gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA"
+
+  build-and-deploy:
+    needs: [test, deploy-infrastructure]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
+    
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+
+      - name: 'Set up Google Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v1'
+
+      - name: Configure Docker to use gcloud as a credential helper
+        run: |
+          gcloud auth configure-docker
+
+      - name: Build Docker image
+        run: |
+          cd app/a_proper_one
+          docker build -t gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA .
+
+      - name: Run Integration Tests
+        run: |
+          # Start container
+          docker run -d --name test-container -p 8000:8000 gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA
+          
+          # Wait for container to be ready
+          sleep 10
+          
+          # Run integration tests against the container
+          cd app/a_proper_one
+          python -m pytest tests/integration/ -v
+          
+          # Cleanup
+          docker stop test-container && docker rm test-container
+
+      - name: Push Docker image
+        run: |
+          docker push gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA
+
+      - name: Deploy to Cloud Run
+        run: |
+          gcloud run deploy $SERVICE \
+            --image gcr.io/$PROJECT_ID/$SERVICE:$GITHUB_SHA \
+            --platform managed \
+            --region $REGION \
+            --allow-unauthenticated \
+            --set-env-vars="PORT=8000" \
+            --memory=512Mi \
+            --cpu=1 \
+            --min-instances=1 \
+            --max-instances=5 \
+            --timeout=300
