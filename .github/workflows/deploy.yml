@@ -71,7 +71,7 @@ jobs:
 
       - name: Configure Docker to use gcloud as a credential helper and login as Service Account
         run: |
-          gcloud auth configure-docker us-docker.pkg.dev
+          sudo gcloud auth configure-docker us-docker.pkg.dev
 
       - name: Build Docker image
         run: |
@@ -117,7 +117,7 @@ jobs:
 
       - name: Configure Docker to use gcloud as a credential helper
         run: |
-          gcloud auth configure-docker us-docker.pkg.dev
+          sudo gcloud auth configure-docker us-docker.pkg.dev
 
       - name: 'Set up Google Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
