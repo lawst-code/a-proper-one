@@ -22,7 +22,7 @@ resource "google_project_service" "container_registry_api" {
   service = "containerregistry.googleapis.com"
 }
 
-resource "google_project_service" "container_registry_api" {
+resource "google_project_service" "artifact_registry_api" {
   service = "artifactregistry.googleapis.com"
 }
 
