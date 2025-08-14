@@ -28,6 +28,7 @@ jobs:
 
       - name: Install dependencies
         run: |
+          cd app/a_proper_one
           python -m pip install --upgrade pip
           pip install -e .
           pip install pytest black flake8 requests
