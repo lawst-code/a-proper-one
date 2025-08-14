@@ -1,6 +1,7 @@
 import requests
 import yaml
 
+
 # Really only to be run in the pipeline
 class TestAPIIntegration:
     """Basic endpoint checking"""
@@ -25,4 +26,6 @@ class TestAPIIntegration:
         with open("a_proper_one.yaml", "r") as f:
             config = yaml.safe_load(f)
         assert config is not None
-        assert config["important_nuclear_code_which_should_fail_the_build_if_wrong"] == "n"
+        assert (
+            config["important_nuclear_code_which_should_fail_the_build_if_wrong"] == "n"
+        )
