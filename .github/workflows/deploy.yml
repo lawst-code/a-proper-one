@@ -103,6 +103,7 @@ jobs:
           cd infra
           terraform apply -auto-approve \
             -var="project_id=$PROJECT_ID" \
+            -var="repository_id=$REPOSITORY_ID" \
             -var="region=$REGION" \
             -var="container_image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA"
 
