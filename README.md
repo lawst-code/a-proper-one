@@ -41,7 +41,7 @@ TestN/
 
 1. **Install dependencies:**
    ```bash
-   cd app/a_proper_one
+   pip install git+https://github.com/lawst-code/Noxus.git
    pip install -e .
    ```
 
