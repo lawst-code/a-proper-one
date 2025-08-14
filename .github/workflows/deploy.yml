@@ -152,6 +152,7 @@ jobs:
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
         run: |
+          gcloud artifacts docker images list $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE
           cd infra
           terraform apply -auto-approve \
             -var="project_id=$PROJECT_ID" \
