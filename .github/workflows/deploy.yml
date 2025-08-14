@@ -39,9 +39,9 @@ jobs:
           pip install git+https://github.com/lawst-code/Noxus.git
 
       - name: Run unit tests
-         run: |
-           cd app/a_proper_one
-           pytest tests/unit/ -v
+        run: |
+          cd app/a_proper_one
+          pytest tests/unit/ -v
 
       - name: Run linting
         run: |
