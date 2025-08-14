@@ -77,7 +77,6 @@ The GitHub Actions workflow automatically:
 
 1. **On Pull Requests:**
    - Runs tests
-   - Builds Docker image (for immediate local running/testing/etc)
 
 2. **On Push to Main:**
    - Runs full test suite
