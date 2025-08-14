@@ -10,8 +10,7 @@ requires-python = ">=3.9"
 dependencies = [
     "fastapi",
     "uvicorn",
-    "pytest",
-    "requests"
+    "pytest"
 ]
 
 [project.optional-dependencies]
