@@ -32,7 +32,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -e .
           pip install pytest requests
-          
+
       - name: Install Noxus CLI
         run: |
           pip install git+https://github.com/lawst-code/Noxus.git
@@ -54,6 +54,11 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
 
       - id: 'auth'
         name: 'Authenticate to Google Cloud'
@@ -88,7 +93,7 @@ jobs:
           
           # Run integration tests against the container
           cd app/a_proper_one
-          pytest tests/integration/ -v
+          python -m pytest tests/integration/ -v
           
           # Cleanup
           docker stop test-container && docker rm test-container
@@ -110,7 +115,7 @@ jobs:
             --min-instances=1 \
             --max-instances=5 \
             --timeout=300
-            
+
   deploy-infrastructure:
     needs: [test, build-and-deploy]
     runs-on: ubuntu-latest
