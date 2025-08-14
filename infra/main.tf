@@ -57,11 +57,6 @@ resource "google_cloud_run_service" "a_proper_one" {
           container_port = 8000
         }
 
-        env {
-          name  = "PORT"
-          value = "8000"
-        }
-
         resources {
           limits = {
             cpu    = "1000m"
