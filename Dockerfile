@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y && apt-get install git -y \
 # Install dependencies
 RUN pip install git+https://github.com/lawst-code/Noxus.git
 RUN pip install -e .
-RUN pip install pytest requests
+RUN pip install pytest
 
 # Copy the plugin files
 COPY . /app/a_proper_one/
