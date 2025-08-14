@@ -28,14 +28,12 @@ jobs:
 
       - name: Install dependencies
         run: |
-          cd app/a_proper_one
           python -m pip install --upgrade pip
           pip install -e .
           pip install pytest black flake8 requests
           
       - name: Install Noxus CLI
         run: |
-          cd app/a_proper_one
           pip install git+https://github.com/lawst-code/Noxus.git
 
       - name: Run unit tests
