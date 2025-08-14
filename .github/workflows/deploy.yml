@@ -42,7 +42,7 @@ jobs:
         run: |
           cd app/a_proper_one
           pytest tests/unit/ -v
-  build-and-deploy:
+  build-and-validate:
     needs: test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop'
@@ -80,23 +80,9 @@ jobs:
       - name: Push Docker image
         run: |
           docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA
-
-      - name: Deploy to Cloud Run
-        run: |
-          gcloud run deploy $SERVICE \
-            --image $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA \
-            --platform managed \
-            --region $REGION \
-            --allow-unauthenticated \
-            --memory=512Mi \
-            --cpu=1 \
-            --min-instances=1 \
-            --max-instances=5 \
-            --timeout=300
-  
   
   deploy-infrastructure:
-    needs: [test, build-and-deploy]
+    needs: [test, build-and-validate]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
 
