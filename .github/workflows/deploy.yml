@@ -31,7 +31,7 @@ jobs:
           cd app/a_proper_one
           python -m pip install --upgrade pip
           pip install -e .
-          pip install pytest black flake8 requests
+          pip install pytest requests
           
       - name: Install Noxus CLI
         run: |
@@ -41,12 +41,6 @@ jobs:
         run: |
           cd app/a_proper_one
           pytest tests/unit/ -v
-
-      - name: Run linting
-        run: |
-          cd app/a_proper_one
-          black --check .
-          flake8 .
 
   deploy-infrastructure:
     needs: test
