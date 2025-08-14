@@ -10,6 +10,7 @@ on:
 
 env:
   PROJECT_ID: '${{ secrets.GCP_PROJECT_ID }}'
+  REPOSITORY_ID: '${{ secrets.GCP_REPOSITORY_ID }}'
   GAR_LOCATION: europe-west1
   SERVICE: a-proper-one-plugin
   REGION: europe-west1
@@ -75,16 +76,16 @@ jobs:
       - name: Build Docker image
         run: |
           cd app/a_proper_one
-          docker build -t $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA .
+          docker build -t $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA .
 
       - name: Push Docker image
         run: |
-          docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA
+          docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA
 
       - name: Deploy to Cloud Run
         run: |
           gcloud run deploy $SERVICE \
-            --image $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA \
+            --image $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA \
             --platform managed \
             --region $REGION \
             --allow-unauthenticated \
@@ -145,8 +146,9 @@ jobs:
           cd infra
           terraform plan \
             -var="project_id=$PROJECT_ID" \
+            -var="repository_id=$REPOSITORY_ID" \
             -var="region=$REGION" \
-            -var="container_image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA"
+            -var="container_image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA"
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
@@ -155,4 +157,4 @@ jobs:
           terraform apply -auto-approve \
             -var="project_id=$PROJECT_ID" \
             -var="region=$REGION" \
-            -var="container_image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY/$SERVICE:$GITHUB_SHA"
+            -var="container_image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA"
