@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "a_proper_one"
+version = "0.1.0"
+description = "A a_proper_one plugin for Noxus"
+requires-python = ">=3.9"
+dependencies = [
+    "noxus-cli",
+    "fastapi",
+    "uvicorn",
+    "pytest",
+    "requests"
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8"
+]

@@ -1,0 +1,7 @@
+# Plugin configuration
+name: a_proper_one
+version: 0.1.0
+description: "A a_proper_one plugin"
+plugin_file: a_proper_one.py
+# extensions
+important_nuclear_code_which_should_fail_the_build_if_wrong: "n"
