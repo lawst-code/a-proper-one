@@ -92,8 +92,7 @@ jobs:
           sleep 10
           
           # Run integration tests against the container
-          cd app/a_proper_one
-          python -m pytest tests/integration/ -v
+          pytest tests/integration/ -v
           
           # Cleanup
           docker stop test-container && docker rm test-container
