@@ -7,7 +7,7 @@ class AProperOnePlugin(Plugin):
     title = "A Proper One Plugin"
 
     def nodes(self):
-        return [AProperOneNode()]
+        return [AProperOneNode(), AnEvenMoreProperOneNode()]
 
 
 class AProperOneNode(Node):
@@ -18,6 +18,7 @@ class AProperOneNode(Node):
     def call(self, input_text: str) -> Dict:
         # Plugin logic here
         return {"result": input_text}
+
 
 class AnEvenMoreProperOneNode(Node):
     name = "an_even_more_proper_one-node"
