@@ -72,13 +72,7 @@ resource "google_cloud_run_service" "a_proper_one" {
     percent         = 100
     latest_revision = true
   }
-
-  lifecycle {
-    ignore_changes = [
-      status,
-    ]
-  }
-
+  
   depends_on = [google_project_service.cloud_run_api]
 }
 
