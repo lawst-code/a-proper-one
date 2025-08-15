@@ -6,6 +6,9 @@ terraform {
       version = "~> 5.0"
     }
   }
+  backend "gcs" {
+    bucket = "a-proper-one-terraform-state-bucket"
+  }
 }
 
 provider "google" {
@@ -35,7 +38,7 @@ resource "google_artifact_registry_repository" "a_proper_repo" {
   provider      = google
   project       = var.project_id
   location      = var.region
-  repository_id = "a_proper_repo"
+  repository_id = "a-proper-repo"
   description   = "Docker images for a proper one"
   format        = "DOCKER"
 
