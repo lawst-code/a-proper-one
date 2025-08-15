@@ -83,6 +83,12 @@ resource "google_cloud_run_service" "a_proper_one" {
     latest_revision = true
   }
 
+  lifecycle {
+    ignore_changes = [
+      status,  # ignore rollout-related status fields
+    ]
+  }
+
   depends_on = [google_project_service.cloud_run_api]
 }
 
