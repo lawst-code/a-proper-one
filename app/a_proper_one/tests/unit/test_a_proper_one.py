@@ -7,7 +7,7 @@ class TestAProperOnePlugin:
         """Test that the plugin can be instantiated"""
         plugin = AProperOnePlugin()
         assert plugin.title == "A Proper One Plugin"
-        assert len(plugin.nodes()) == 1
+        assert len(plugin.nodes()) == 2
 
     def test_plugin_has_node(self):
         """Test that the plugin has the expected node"""
