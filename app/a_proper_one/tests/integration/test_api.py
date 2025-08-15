@@ -12,9 +12,9 @@ class TestAPIIntegration:
 
     def test_node_endpoint(self):
         """Test the main node endpoint"""
-        test_data = {"input_text": "ayo"}
+        test_data = {"inputs": {"input_text": "SSss"}}
         response = requests.post(
-            f"{self.BASE_URL}/nodes/a_proper_one-node", json=test_data
+            f"{self.BASE_URL}/nodes/a_proper_one-node/run", json=test_data
         )
         assert response.status_code == 200
 
