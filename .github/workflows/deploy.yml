@@ -134,6 +134,7 @@ jobs:
             -var="repository_id=$REPOSITORY_ID" \
             -var="region=$REGION" \
             -var="container_image=$GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA"
+            -detailed-exitcode
 
       - name: Terraform Apply
         if: github.ref == 'refs/heads/main'
