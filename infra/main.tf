@@ -85,7 +85,7 @@ resource "google_cloud_run_service" "a_proper_one" {
 
   lifecycle {
     ignore_changes = [
-      status,  # ignore rollout-related status fields
+      status,
     ]
   }
 
