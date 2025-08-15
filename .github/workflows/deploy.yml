@@ -77,6 +77,27 @@ jobs:
           cd app/a_proper_one
           docker build -t $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA .
 
+      - name: Run Integration Tests
+        run: |
+          # Install test dependencies in this job
+          cd app/a_proper_one
+          python -m pip install --upgrade pip
+          pip install -e .
+          pip install pytest requests pyyaml
+          
+          # Start container
+          docker run -d --name test-container -p 8000:8000 $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA
+          
+          # Wait for container to be ready
+          sleep 10
+          
+          # Run integration tests against the container
+          cd app/a_proper_one
+          python -m pytest tests/integration/ -v
+          
+          # Cleanup
+          docker stop test-container && docker rm test-container
+
       - name: Push Docker image
         run: |
           docker push $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE:$GITHUB_SHA
