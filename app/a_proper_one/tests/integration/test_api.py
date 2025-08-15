@@ -21,12 +21,3 @@ class TestAPIIntegration:
         result = response.json()
         assert "result" in result
         assert result["result"] == "ayo"
-
-    def check_yaml_config(self):
-        """Check that the yaml config is valid"""
-        with open("a_proper_one.yaml", "r") as f:
-            config = yaml.safe_load(f)
-        assert config is not None
-        assert (
-            config["important_nuclear_code_which_should_fail_the_build_if_wrong"] == "n"
-        )

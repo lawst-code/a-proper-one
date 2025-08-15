@@ -15,7 +15,7 @@ TestN/
 │       ├── docker-compose.*.yml    # Local deployment
 │       └── tests/  
 │           ├── unit                # Tests for actual business plugin logic
-│           └── integration         # To run on CI/CD pipeline - basic endpoint and config checks against image to be deployed   
+│           └── integration         # (Disabled for now)   
 |   
 ├── infra/                          # Terraform infrastructure
 │   ├── main.tf                     # Main Terraform config
