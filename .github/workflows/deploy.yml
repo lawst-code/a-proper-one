@@ -140,7 +140,7 @@ jobs:
         run: |
           gcloud artifacts docker images list $GAR_LOCATION-docker.pkg.dev/$PROJECT_ID/$REPOSITORY_ID/$SERVICE
           cd infra
-          terraform import google_cloud_run_service.app projects/$PROJECT_ID/locations/$REGION/services/$SERVICE
+          terraform import google_cloud_run_service.a_proper_one projects/$PROJECT_ID/locations/$REGION/services/$SERVICE
           terraform apply -auto-approve \
             -var="project_id=$PROJECT_ID" \
             -var="repository_id=$REPOSITORY_ID" \
