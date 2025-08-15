@@ -33,19 +33,6 @@ resource "google_project_service" "cloud_build_api" {
   service = "cloudbuild.googleapis.com"
 }
 
-# Create the Artifact Registry repository (Docker format)
-resource "google_artifact_registry_repository" "a_proper_repo" {
-  provider      = google
-  project       = var.project_id
-  location      = var.region
-  repository_id = "a-proper-repo"
-  description   = "Docker images for a proper one"
-  format        = "DOCKER"
-
-  # Make sure the API is enabled first
-  depends_on = [google_project_service.artifact_registry_api]
-}
-
 # Actual config for service
 resource "google_cloud_run_service" "a_proper_one" {
   name     = "a-proper-one-plugin"
