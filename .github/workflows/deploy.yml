@@ -119,7 +119,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd infra
-          terraform init
+          terraform init -input=false -backend-config="bucket=a-proper-one-terraform-state-bucket"
 
       - name: Terraform Validate
         run: |
