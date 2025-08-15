@@ -13,7 +13,7 @@ class TestAProperOnePlugin:
         """Test that the plugin has the expected node"""
         plugin = AProperOnePlugin()
         nodes = plugin.nodes()
-        assert len(nodes) == 1
+        assert len(nodes) == 2
         assert isinstance(nodes[0], AProperOneNode)
 
 
